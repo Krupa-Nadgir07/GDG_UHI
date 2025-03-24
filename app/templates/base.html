@@ -1,0 +1,157 @@
+<!doctype html>
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {%block title%} {%endblock%}
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@lucide/icons@0.6.0/dist/lucide.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/heroicons@1.0.0/heroicons.min.js"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'uhi-blue': '#1e40af',
+                        'uhi-green': '#15803d',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .gradient-preview {
+            display: inline-block;
+            width: 80px;
+            height: 10px;
+            vertical-align: middle;
+            margin-left: 10px;
+            position: relative;
+        }
+
+        /* New styles for color palette display */
+        #colorPaletteDropdown {
+            padding-right: 100px;
+            /* Make room for the gradient preview */
+        }
+
+        #colorPaletteDropdown option {
+            padding-right: 90px;
+            /* Adjust padding to accommodate the gradient */
+        }
+
+        .gradient-container {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .gradient-preview {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 130px;
+            height: 10px;
+            pointer-events: none;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen flex flex-col bg-gray-100">
+    <!-- Original Header -->
+    <div style="background-image: url('{{ url_for('static', filename='images/blur.jpg') }}');" class="pr-3 pl-3">
+        <div class="top-bar flex justify-between items-center p-2">
+            <!-- Logo Section -->
+            <div>
+                <a href="/" class="flex items-center mb-3 md:mb-0 md:me-auto text-gray-900 no-underline">
+                    <img src={{ url_for('static', filename='images/logo.png') }} class="h-16" alt="Logo" />
+                </a>
+            </div>
+
+            <!-- Name Section -->
+            <div class="name text-white font-large text-4xl">UHI LENS</div>
+
+            <!-- Tagline Section -->
+            <div>
+                <h6 class="text-white no-underline italic text-xl">
+                    Go, Change The World
+                </h6>
+            </div>
+        </div>
+        <hr class="border-t border-gray-300 w-full mx-auto" />
+
+        <nav>
+            <div class="container mx-auto px-4 py-3">
+                <div class="flex items-center justify-between">
+                    <!-- Logo -->
+                    <div class="flex-0">
+                        <div class="flex justify-center items-center">
+                            <img src={{ url_for('static', filename='images/earth.png') }} height="50px" width="50px" alt="Earth">
+                            {%block subhead%}
+                            {%endblock%}
+                            <!--<h6 class="ml-2 text-xl font-bold text-white italic transition-colors duration-300">
+                                Socio Urban Analysis for your Region</h6>-->
+                        </div>
+                    </div>
+
+                    <!-- Desktop Navigation -->
+                    <div class="hidden md:flex space-x-8">
+                        <a href="{{ url_for('home') }}" 
+                            class="text-white hover:text-yellow-400 transition-colors duration-300 text-md tracking-wider font-semibold italic">Home</a>
+                        <a href="{{ url_for('roi') }}" 
+                            class="text-white hover:text-yellow-400 transition-colors duration-300 text-md tracking-wider font-semibold italic">Analyse
+                            your territory</a>
+                        <a href="{{ url_for('world') }}" 
+                            class="text-white hover:text-yellow-400 transition-colors duration-300 text-md tracking-wider font-semibold italic">Impacts
+                            on the World</a>
+                        <a href="{{ url_for('docs') }}" 
+                            class="text-white hover:text-yellow-400 transition-colors duration-300 text-md tracking-wider font-semibold italic">Read
+                            the Docs</a>
+                    </div>
+
+                    <!-- Mobile menu button -->
+                    <div class="md:hidden flex items-center">
+                        <button id="mobile-menu-button" class="text-white focus:outline-none">
+                            <i data-lucide="menu" class="h-6 w-6"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mobile menu -->
+            <div id="mobile-menu" class="hidden md:hidden">
+                <a href="{{ url_for('home') }}"  class="block py-2 px-4 text-sm text-white hover:bg-green-800">Home</a>
+                <a href="{{ url_for('roi') }}" class="block py-2 px-4 text-sm text-white hover:bg-green-800">Analyse your territory</a>
+                <a href="{{ url_for('world') }}"  class="block py-2 px-4 text-sm text-white hover:bg-green-800">Impacts on the World</a>
+                <a href="{{ url_for('docs') }}"  class="block py-2 px-4 text-sm text-white hover:bg-green-800">Read the Docs</a>
+                <a href="{{ url_for('dashboard') }}"  class="block py-2 px-4 text-sm text-white hover:bg-green-800">Dashboard</a>
+            </div>
+        </nav>
+    </div>
+        <script>
+        // Mobile menu toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Initialize Lucide icons
+        lucide.createIcons();
+    </script>
+{% block content %}
+{% endblock %}
+
+</body>
+</html>

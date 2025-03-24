@@ -1,0 +1,247 @@
+{% extends "base.html" %}
+{%block title%} <title>Region of Interest</title> {%endblock%}
+{%block subhead%}
+    <h6 class="ml-2 text-xl font-bold text-white italic transition-colors duration-300">
+       Pin Your Location!</h6>        
+    {%endblock%}
+    
+{% block content %}
+
+    <div id="mainContainer" class="flex flex-grow transition-all duration-1000 ease-in-out z-20 ">
+    <div id="searchContainer" class="flex flex-col justify-center items-center w-full transition-all duration-1000 ease-in-out z-20" style="height:40vh;">
+        <div class="w-full max-w-md mx-auto z-20">
+            <div class="relative w-full z-20">
+                <input 
+                    type="search" 
+                    id="searchInput"
+                    class="w-full p-3 pr-12 text-gray-900 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-800 transition duration-300"
+                    placeholder="Search Location"
+                    autocomplete="off"
+                />
+                <button 
+                    onclick="onButtonSearch()"
+                    class="absolute right-2 top-1/2 transform -translate-y-1/2 px-3 py-1 text-white bg-green-900 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition duration-300"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                </button>
+            </div>
+            
+            <div class="relative w-full mt-2">
+                <ul id="resultsContainer" class="hidden absolute w-full bg-white border border-gray-200 rounded-md shadow-lg max-h-48 overflow-y-auto z-30"></ul>
+            </div>
+            
+            <div id="sidePanel" class="hidden mt-4 p-4 bg-white border border-gray-200 rounded-md shadow-lg max-h-64 overflow-y-auto z-20">
+                <!-- Side panel content will be dynamically inserted here -->
+            </div>
+        </div>
+    </div>
+</div>
+
+
+    <div id="viewDiv" class="w-full min-h-screen transition-all duration-1000 ease-in-out z-10"></div>
+    <script src="https://js.arcgis.com/4.31/"></script>
+    <script>
+        let selectedCoordinates = {};
+        let isSpinning = false;
+
+        function wait(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        require([
+            "esri/Map",
+            "esri/views/SceneView",
+            "esri/geometry/Point"
+        ], function (Map, SceneView, Point) {
+            const map = new Map({
+                basemap: "satellite",
+                ground: "world-elevation"
+            });
+
+            const sceneView = new SceneView({
+                container: "viewDiv",
+                map: map,
+                camera: {
+                    position: {
+                        latitude: 0,
+                        longitude: -90,
+                        z: 27000000
+                    },
+                    tilt: 0,
+                    heading: 0
+                },
+                environment: {
+                    background: {
+                        type: "color",
+                        color: [255, 255, 255, 1]
+                        //image: "https://images.pexels.com/photos/998641/pexels-photo-998641.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+                    },
+                    starsEnabled: false,
+                    atmosphereEnabled: false
+                },
+                ui: {
+                    components: []
+                },
+                constraints: {
+                    altitude: {
+                        min: 100,
+                        max: 25000000
+                    }
+                }
+                
+            });
+
+            window.sceneView = sceneView;
+
+            let angle = 0;
+            const radius = 27000000;
+            const rotationDuration = 10000;
+            const rotationSpeed = 1.5;
+            let rotationStartTime;
+
+            function spinEarth(timestamp) {
+                if (!rotationStartTime) rotationStartTime = timestamp;
+                const elapsed = timestamp - rotationStartTime;
+
+                if (elapsed < rotationDuration) {
+                    angle += rotationSpeed;
+                    if (angle >= 360) angle = 0;
+
+                    const radianAngle = (angle * Math.PI) / 180;
+                    const latitude = Math.sin(radianAngle) * 23.5;
+                    const longitude = angle - 90;
+
+                    sceneView.goTo({
+                        position: {
+                            latitude: latitude,
+                            longitude: longitude,
+                            z: radius
+                        },
+                        heading: 180 - angle,
+                        tilt: 0
+                    }, { animate: false });
+
+                    requestAnimationFrame(spinEarth);
+                } else {
+                    transitionTo2D();
+                }
+            }
+
+            async function transitionTo2D() {
+                if (!selectedCoordinates.latitude || !selectedCoordinates.longitude) {
+                    console.error("Coordinates are not set. Cannot transition to 2D view.");
+                    return;
+                }
+
+                const targetPoint = new Point({
+                    latitude: parseFloat(selectedCoordinates.latitude),
+                    longitude: parseFloat(selectedCoordinates.longitude)
+                });
+
+                // Change layout before zooming
+                document.getElementById("mainContainer").classList.remove("flex");
+                document.getElementById("mainContainer").classList.add("flex-col");
+                //document.getElementById("viewDiv").classList.remove("w-1/2");
+                document.getElementById("viewDiv").classList.add("h-3/4", "order-last");
+                //document.getElementById("searchContainer").classList.remove("w-1/4");
+                document.getElementById("searchContainer").classList.add("w-full", "h-1/4");
+                //document.getElementById("resultsContainer").classList.add("side-list");
+                const sidePanel = document.getElementById('sidePanel');
+                sidePanel.innerHTML = resultsContainer.innerHTML;
+                //document.getElementById("hotspots").classList.add('hidden')
+                resultsContainer.classList.add('hidden'); 
+                sidePanel.classList.remove('hidden');
+
+                sceneView.goTo({
+                    target: targetPoint,
+                    scale: 50000,
+                    tilt: 0
+                }, {
+                    duration: 5000,
+                    easing: "ease-in-out"
+                })
+                .then(() => {
+                    setTimeout(function () {
+                        window.location.href = '/dashboard';
+                    }, 5000);
+                });
+            }
+
+            window.spinEarth = spinEarth;
+        });
+
+        async function fetchSearchResults(query) {
+            const url = `https://geocode.maps.co/search?q=${encodeURIComponent(query)}&api_key=678284387ed0f830130830icr0e5e82`;
+
+            try {
+                const response = await fetch(url);
+                if (!response.ok) throw new Error("Failed to fetch geocoding data.");
+                return await response.json();
+            } catch (error) {
+                alert(`Unable to fetch results. Please try again later. ${error.message}`);
+                return [];
+            }
+        }
+
+        function displayResults(results) {
+            const dropdown = document.getElementById('resultsContainer');
+            dropdown.innerHTML = "";
+            dropdown.classList.remove('hidden');
+
+            if (results.length === 0) {
+                const noResultItem = document.createElement("li");
+                noResultItem.className = "px-4 py-2 text-gray-700";
+                noResultItem.textContent = "No results found.";
+                dropdown.appendChild(noResultItem);
+                return;
+            }
+
+            results.forEach((result) => {
+                const item = document.createElement('li');
+                item.className = "px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer";
+                item.textContent = result.display_name;
+
+                item.addEventListener('click', () => {
+                    selectedCoordinates = {
+                        latitude: result.lat,
+                        longitude: result.lon
+                    };
+
+                    dropdown.innerHTML = `<li class="px-4 py-2 text-gray-700"><stong>Searched location:<stong> ${result.display_name}</li>`;
+                    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+                    requestAnimationFrame(window.spinEarth);
+                    fetch('/region_of_interest', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(result)
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log('Success:', data);
+                        })
+                        .catch((error) => {
+                            console.error('Error:', error);
+                        });
+                });
+
+                dropdown.appendChild(item);
+            });
+        }
+
+        async function onButtonSearch() {
+            const query = document.getElementById('searchInput').value.trim();
+            if (query) {
+                const results = await fetchSearchResults(query);
+                displayResults(results);
+            } else {
+                alert("Please enter a search query.");
+            }
+        }
+
+        window.onButtonSearch = onButtonSearch;
+    </script>
+{% endblock %}

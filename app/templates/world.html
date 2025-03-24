@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{%block title%} <title>World Wide Analysis</title> {%endblock%}
+
+{%block subhead%}
+<h6 class="ml-2 text-xl font-bold text-white italic transition-colors duration-300">
+    Lets make UHI features tour the world!</h6>
+{%endblock%}
+
+{% block content %}
+
+    <!-- Tab Selection -->
+    <div class="w-full flex border-b border-green-700">
+        <button id="sentinel-tab" class="px-4 py-2 w-1/2 text-center border-b-2 hover:border-green-700 text-green-900 focus:outline-none">Sentinel Features</button>
+        <button id="socio-urban-tab" class="px-4 py-2 w-1/2 text-center border-b-2 hover:border-green-700 text-green-900 focus:outline-none">Socio Urban Features</button>
+    </div>
+
+    <!-- Form -->
+    <form action="/world_wide_analysis" method="POST" id="options-form" class="flex flex-col items-center mt-4 px-4 mb-4">
+        <!-- Sentinel Features Tab -->
+        <div id="sentinel-tab-content" class="tab-content active w-full max-w-2xl">
+            <h3 class="text-lg font-bold text-green-900 mb-4">Sentinel Features</h3>
+            <div class="flex flex-col md:flex-row justify-between space-y-4 md:space-y-0 md:space-x-4">
+                <select name="sentinel_feature" class="w-full md:w-1/3 px-4 py-2 border rounded-lg bg-white text-green-900 focus:outline-none focus:ring-2 focus:ring-green-500">
+                    <option value="NDVI">NDVI</option>
+                    <option value="NBR">NBR</option>
+                    <option value="NDUI">NDUI</option>
+                    <option value="GNDVI">GNDVI</option>
+                    <option value="NDWI">NDWI</option>
+                    <option value="Shade">Shade</option>
+                    <option value="NDBI">NBDI</option>
+                    <option value="NMDI">NMDI</option> 
+                    <option value="NDBSI">NDBSI</option>
+                    <option value="NBaDI">NBADI</option>
+                    <option value="WVP">WVP</option>
+                    <option value="AOT">AOT</option>
+                    <option value="LST">LST</option>
+                    <option value="SAVI">SAVI</option>
+                    <option value="UHSI">UHSI</option>
+                </select>
+                <select name="statistical_feature" class="w-full md:w-1/3 px-4 py-2 border rounded-lg bg-white text-green-900 focus:outline-none focus:ring-2 focus:ring-green-500">
+                    <option value="min">Minimum</option>
+                    <option value="max">Maximum</option>
+                    <option value="stdDev">Standard Deviation</option>
+                    <option value="mean">Mean</option>
+                </select>
+                <button type="submit" class="w-full md:w-1/3 px-6 py-2 bg-green-700 text-white rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 transition duration-300">Submit</button>
+            </div>
+        </div>
+
+        <!-- Socio Urban Features Tab -->
+        <div id="socio-urban-tab-content" class="tab-content hidden w-full max-w-2xl">
+            <h3 class="text-lg font-bold text-green-900 mb-4">Socio Urban Features</h3>
+            <div class="flex flex-col md:flex-row justify-between space-y-4 md:space-y-0 md:space-x-4">
+                <select name="socio_urban_feature" class="w-full md:w-2/3 px-4 py-2 border rounded-lg bg-white text-green-900 focus:outline-none focus:ring-2 focus:ring-green-500">
+                    <option value="degree_of_urbanization">Degree of Urbanization</option>
+                    <option value="night_light_intensity">Night Light Intensity</option>
+                    <option value="population_density_per_km2">Population Density per sqkm</option>
+                    <option value="built_up_surface">Built Up Surface Area</option>
+                    <option value="avg_gross_built_height">Average Gross Built Up Height</option>
+                    <option value="morphological_settlement_zone">Morphological Settlement Zone</option>
+                    <option value="global_impervious_surface_occurence">Global Impervious Surface Occurence</option>
+                    <option value="NO2_mol_per_m2">NO2 mol/m2</option>
+                    <option value="pm25(microg/10m3)">pm25(microg/10m3)</option>
+                </select>
+                <button type="submit" class="w-full md:w-1/3 px-6 py-2 bg-green-700 text-white rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 transition duration-300">Submit</button>
+            </div>
+        </div>
+    </form>
+
+    <!-- Map Container -->
+   <div id="map-container" class="w-full h-full flex-grow bg-gray-200 mt-4">
+    {{ map_html|safe }}
+</div>
+
+<script>
+
+        // Tab switching
+        const sentinelTab = document.getElementById('sentinel-tab');
+        const socioUrbanTab = document.getElementById('socio-urban-tab');
+        const sentinelTabContent = document.getElementById('sentinel-tab-content');
+        const socioUrbanTabContent = document.getElementById('socio-urban-tab-content');
+
+        function switchTab(activeTab, activeContent, inactiveTab, inactiveContent) {
+            activeTab.classList.add('border-green-700');
+            inactiveTab.classList.remove('border-green-700');
+            activeContent.classList.remove('hidden');
+            inactiveContent.classList.add('hidden');
+        }
+
+        sentinelTab.addEventListener('click', () => {
+            switchTab(sentinelTab, sentinelTabContent, socioUrbanTab, socioUrbanTabContent);
+        });
+
+        socioUrbanTab.addEventListener('click', () => {
+            switchTab(socioUrbanTab, socioUrbanTabContent, sentinelTab, sentinelTabContent);
+        });
+
+        // Initialize with Sentinel tab active
+        switchTab(sentinelTab, sentinelTabContent, socioUrbanTab, socioUrbanTabContent);
+    </script>
+{%endblock%}
+

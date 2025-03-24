@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+{%block title%} <title>Dashboard</title> {%endblock%}
+{%block subhead%}
+<h6 class="ml-2 text-xl font-bold text-white italic transition-colors duration-300">
+    Dashboard</h6>
+{%endblock%}
+
+{% block content %}
+<div class="grid grid-rows-[1fr,2fr] min-h-screen pt-8 bg-white">
+    <!-- Row 1 -->
+    <div class="flex items-center justify-between p-6 w-full" style="height: 40vh;">
+        <div class="bg-white h-[50vh] flex items-center justify-between p-6 w-full">
+            <!-- Left Section (City Name and Location) -->
+            <div class="flex flex-col items-start text-left space-y-2 max-w-md pl-20">
+                <div class="text-4xl font-bold text-gray-800">{{city}}</div>
+                <div class="text-lg text-gray-600">{{address}}</div>
+            </div>
+
+            <!-- Right Section (Latitude, Longitude, Area) -->
+            <div class="flex flex-col items-center space-y-4 text-base text-gray-500 ml-auto pr-20">
+                <div class="flex flex-row space-x-8">
+                    <div class="flex flex-col items-center">
+                        <div class="font-semibold">Latitude</div>
+                        <div class="text-gray-700">{{info['latitude']}}</div>
+                    </div>
+                    <div class="flex flex-col items-center">
+                        <div class="font-semibold">Longitude</div>
+                        <div class="text-gray-700">{{info['longitude']}}</div>
+                    </div>
+                </div>
+                <div class="flex flex-col items-center">
+                    <div class="font-semibold">Area</div>
+                    <div class="text-gray-700">{{area_covered}}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Row 2 -->
+    <div class="container mx-auto p-4 h-full"
+        style="background-image: url('{{ url_for('static', filename='images/blur.jpg') }}');">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 h-full">
+            <!-- Column 1 -->
+            <div class="space-y-4 flex flex-col">
+                <div class="bg-white rounded-lg shadow-md p-4 flex-1">
+                    <div class="flex items-start mb-4 justify-between">
+                        <h3 class="text-2xl font-bold">Socio Urban Features</h3>
+                        <img src={{ url_for('static', filename='images/urbanization.png') }} alt="Icon" class="ml-2 h-20 w-20 object-cover z-10" />
+                    </div>
+                    <div class="relative z-20 pt-2" style="max-width: calc(100% - 5rem);">
+                        <p class="text-sm text-gray-800 mb-4 items-start relative z-20 -mt-16">
+                            Explore how these parameters contribute to rising temperatures and uneven heat
+                            distribution, and discover ways to mitigate their impact.
+                        </p>
+                    </div>
+                    <a href="{{ url_for('socio_urban') }}"
+                        class="inline-flex items-center px-6 py-3 bg-green-900 text-white text-sm font-medium rounded-full shadow-lg transform hover:scale-105 transition-all group">
+                        <span class="mr-2">View More</span>
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                            class="h-5 w-5 transform group-hover:translate-x-2 transition-transform" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                        </svg>
+                    </a>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-md p-4 flex-1">
+                    <div class="flex items-start mb-4 justify-between">
+                        <h3 class="text-2xl font-bold">Satellite Features</h3>
+                        <img src={{ url_for('static', filename='images/sentinel.png') }} alt="Icon" class="ml-2 h-20 w-20 object-cover z-10" />
+                    </div>
+                    <div class="relative z-20 pt-2" style="max-width: calc(100% - 5rem);">
+                        <p class="text-sm text-gray-800 mb-4 items-start relative z-20 -mt-16">
+                            Explore how Sentinel-based indices like NDVI, NBR, AOT, WVP, and Shade 
+                            shape urban climate, air quality, and ecological balance, and discover strategies to enhance sustainability and resilience.
+                        </p>
+                    </div>
+                    <a href="{{ url_for('sentinel') }}"
+                        class="inline-flex items-center px-6 py-3 bg-green-900 text-white text-sm font-medium rounded-full shadow-lg transform hover:scale-105 transition-all group">
+                        <span class="mr-2">View More</span>
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                            class="h-5 w-5 transform group-hover:translate-x-2 transition-transform" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                        </svg>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Column 2: Image -->
+            <div class="flex flex-col items-center justify-center h-full border-white">
+                <img src="data:image/png;base64,{{ sat_img }}" alt="Center Image" class="w-full h-full object-contain">
+                <h6 class="mt-4 text-center text-white">Satellite View of {{city}}</h6>
+            </div>
+
+
+            <!-- Column 3 -->
+            <div class="h-full">
+                <div class="bg-white rounded-lg shadow-md p-4 flex-1 h-full">
+                    <div class="flex items-start mb-4 justify-between">
+                        <h3 class="text-2xl font-bold">Analyse the Urban Heat Index of {{city}}</h3>
+                        <img src={{ url_for('static', filename='images/urban.png') }} alt="Icon" class="ml-2 h-20 w-20 object-cover z-10" />
+                    </div>
+                    <div class="relative z-20 pt-6" style="max-width: calc(100% - 5rem);">
+                        <p class="text-sm text-gray-800 mb-4 items-start relative pt-6 z-20 -mt-16">
+                             Explore how the EA method, a widely used approach for UHII estimation, buffers urban
+                                areas while excluding water bodies
+                                and topographic relief. The IEA method refines this by removing impervious surfaces,
+                                while the MEA method further
+                                improves accuracy by considering night light intensity. The DEA method dynamically
+                                adjusts for multiple confounding
+                                factors, ensuring precise UHII assessments. Combining these methods provides a
+                                comprehensive understanding of urban heat
+                                dynamics, aiding effective mitigation strategies.
+                        </p>
+                    </div>
+                    <a href="{{ url_for('uhi_main') }}"
+                        class="inline-flex items-center px-6 py-3 bg-green-900 text-white text-sm font-medium rounded-full shadow-lg transform hover:scale-105 transition-all group">
+                        <span class="mr-2">View More</span>
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                            class="h-5 w-5 transform group-hover:translate-x-2 transition-transform" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endblock %}

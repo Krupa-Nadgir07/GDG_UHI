@@ -1,0 +1,209 @@
+{% extends "base.html" %}
+{%block title%} <title>Home</title> {%endblock%}
+{%block subhead%}
+    <h6 class="ml-2 text-xl font-bold text-white italic transition-colors duration-300">
+       Home</h6>        
+    {%endblock%}
+    
+{% block content %}
+    <div class="p-4">
+        <div class="relative overflow-hidden rounded-xl shadow-2xl">
+            <div id="carousel" class="flex transition-transform duration-500 ease-out ">
+                <!-- Slide 1 -->
+                <!-- Slide 1 -->
+                <div class="w-full flex-shrink-0 relative">
+                    <img src="https://images.unsplash.com/photo-1516738901171-8eb4fc13bd20?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                        alt="Rising Heat in Asia" class="w-full h-64 md:h-96 object-cover">
+                    <div class="absolute inset-0 bg-black bg-opacity-40 p-8">
+                        <p class="text-white text-lg md:text-4xl font-bold absolute top-4 left-4">
+                            Cities in China, Indonesia, and Malaysia face extreme heat—up to
+                            <span class="text-red-300">5.9°C</span> hotter!
+                        </p>
+                        <p class="text-white text-lg md:text-3xl font-bold absolute bottom-8 right-4 text-right">
+                            UHI is intensifying the crisis, We need to hurry up!!
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Slide 2 -->
+                <div class="w-full flex-shrink-0 relative">
+                    <img src="https://centrocompetencia.com/wp-content/uploads/2022/11/iStock-1351542181.jpg"
+                        alt="Economic Impact" class="w-full h-64 md:h-96 object-cover">
+                    <div class="absolute inset-0 bg-black bg-opacity-40 p-8">
+                        <p class="text-white text-lg md:text-4xl font-bold absolute top-4 left-4">
+                            Urban expansion & UHI could cut GDP by
+                            <span class="text-red-300">1.4–1.7%</span>.
+                        </p>
+                        <p class="text-white text-lg md:text-3xl font-bold absolute bottom-8 right-4 text-right">
+                            The world demands sustainable solutions!
+                        </p>
+                    </div>
+                </div>
+
+
+                <!-- Slide 3 -->
+                <div class="w-full flex-shrink-0 relative">
+                    <img src="https://chaintechdev.com/wp-content/uploads/2019/07/smart-cities-global-market-to-grow-exponentially-with-disruptive-technologies-1200x480.jpg"
+                        alt="Indian Tech Cities" class="w-full h-64 md:h-96 object-cover">
+                    <div class="absolute inset-0 bg-black bg-opacity-60 p-8">
+                        <p class="text-white text-lg md:text-4xl font-bold absolute top-4 left-4">
+                            <span class="text-red-200">Bengaluru & Hyderabad</span> are heating up fast!
+                        </p>
+                        <p class="text-green-200 text-lg md:text-3xl font-bold absolute bottom-8 right-4 text-right">
+                            Urgent Green Plannig needed!
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Navigation Arrows -->
+            <button id="prevBtn"
+                class="absolute top-1/2 left-4 transform -translate-y-1/2 bg-white bg-opacity-50 hover:bg-opacity-75 text-gray-800 p-2 rounded-full focus:outline-none">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                    class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                </svg>
+            </button>
+            <button id="nextBtn"
+                class="absolute top-1/2 right-4 transform -translate-y-1/2 bg-white bg-opacity-50 hover:bg-opacity-75 text-gray-800 p-2 rounded-full focus:outline-none">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                    class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                </svg>
+            </button>
+
+            <!-- Slide Indicators -->
+            <div class="absolute bottom-4 left-0 right-0 flex justify-center space-x-2">
+                <div class="w-3 h-3 rounded-full bg-white bg-opacity-50 transition-all duration-600 ease-in-out"></div>
+                <div class="w-3 h-3 rounded-full bg-white bg-opacity-50 transition-all duration-600 ease-in-out"></div>
+                <div class="w-3 h-3 rounded-full bg-white bg-opacity-50 transition-all duration-600 ease-in-out"></div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="max-w-7xl mx-auto p-6 justify-center items-center">
+        <h1 class="text-4xl font-bold text-center text-gray-800 mb-12">Discover Our Solutions to Urban Heat Island!</h1>
+
+        <div class="flex justify-center items-center">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Card 1 -->
+                <div class="bg-gradient-to-br from-purple-600 to-purple-800 text-white p-8 rounded-2xl shadow-xl flex flex-col justify-between h-full transform transition duration-500 hover:scale-105"
+                    style="background-image: url('{{ url_for('static', filename='images/blur.jpg') }}');">
+                    <div class="text-center">
+                        <div class="text-5xl mb-6 text-purple-200"><i class="fas fa-satellite"></i></div>
+                        <h2 class="text-2xl font-bold mb-4">Remote Sensing</h2>
+                        <p class="text-purple-100">Harnessing satellite technology to monitor environmental changes
+                            without
+                            the need for thermal sensors in urban areas. A cost-effective and scalable solution.</p>
+                    </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="bg-gradient-to-br from-green-500 to-green-700 text-white p-8 rounded-2xl shadow-xl flex flex-col justify-between h-full transform transition duration-500 hover:scale-105"
+                    style="background-image: url('{{ url_for('static', filename='images/blur.jpg') }}');">
+                    <div class="text-center">
+                        <div class="text-5xl mb-6 text-green-200"><i class="fas fa-globe"></i></div>
+                        <h2 class="text-2xl font-bold mb-4">Global Insights</h2>
+                        <p class="text-green-100">Eliminating regional constraints, our approach enables environmental
+                            analysis applicable to any location worldwide, fostering a global perspective.</p>
+                    </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div style="background-image: url('{{ url_for('static', filename='images/blur.jpg') }}');"
+                    class="bg-gradient-to-br from-pink-600 to-pink-800 text-white p-8 rounded-2xl shadow-xl flex flex-col justify-between h-full transform transition duration-500 hover:scale-105">
+                    <div class="text-center">
+                        <div class="text-5xl mb-6 text-pink-200"><i class="fas fa-chart-bar"></i></div>
+                        <h2 class="text-2xl font-bold mb-4">Comprehensive Analysis</h2>
+                        <p class="text-pink-100">Forecasting environmental trends by integrating socioeconomic factors
+                            with
+                            ecological data, leading to holistic and impactful solutions.</p>
+                    </div>
+                </div>
+
+                <!-- Card 4 -->
+                <div style="background-image: url('{{ url_for('static', filename='images/blur.jpg') }}');"
+                    class="bg-gradient-to-br from-yellow-500 to-yellow-700 text-white p-8 rounded-2xl shadow-xl flex flex-col justify-between h-full transform transition duration-500 hover:scale-105">
+                    <div class="text-center">
+                        <div class="text-5xl mb-6 text-yellow-200"><i class="fas fa-cloud-sun"></i></div>
+                        <h2 class="text-2xl font-bold mb-4">Seasonal Impact Studies</h2>
+                        <p class="text-yellow-100">Understanding how urban heat islands fluctuate across seasons,
+                            providing
+                            key insights for climate-adaptive urban planning.</p>
+                    </div>
+                </div>
+
+                <!-- Card 5 -->
+                <div style="background-image: url('{{ url_for('static', filename='images/blur.jpg') }}');"
+                    class="relative bg-gradient-to-br from-blue-600 to-blue-800 text-white p-8 rounded-2xl shadow-xl flex flex-col justify-between h-full overflow-hidden group transform transition duration-500 hover:scale-105">
+                    <div
+                        class="absolute inset-0 bg-cover bg-center opacity-20 group-hover:opacity-30 transition duration-300">
+                    </div>
+                    <div class="relative z-10 text-center">
+                        <div class="text-5xl mb-6 text-blue-200"><i class="fas fa-lightbulb"></i></div>
+                        <h2 class="text-2xl font-bold mb-4">Innovative Solutions</h2>
+                        <p class="text-blue-100">Offering advanced analytics and forecasting, coupled with strategic
+                            mitigation plans to combat urban heat islands and environmental challenges.</p>
+                    </div>
+                </div>
+                <div style="background-image: url('{{ url_for('static', filename='images/blur.jpg') }}');"
+                    class="bg-gradient-to-br from-red-600 to-red-800 text-white p-8 rounded-2xl shadow-xl flex flex-col justify-between h-full transform transition duration-500 hover:scale-105">
+                    <div
+                        class="absolute inset-0 bg-cover bg-center opacity-20 group-hover:opacity-30 transition duration-300">
+                    </div>
+                    <div>
+                        <div class="relative z-10 text-center">
+                            <div class="text-5xl mb-6 text-red-200"><i class="fas fa-city"></i></div>
+                            <h2 class="text-2xl font-bold mb-4">Urban Planning Revolution</h2>
+                            <p class="text-red-100">Transforming cities with data-driven strategies to mitigate heat
+                                islands, improve air
+                                quality, and enhance overall urban livability.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        const carousel = document.getElementById('carousel');
+        const slides = carousel.children;
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const indicators = document.querySelectorAll('.absolute.bottom-4 > div');
+        let currentSlide = 0;
+
+        function updateCarousel() {
+            carousel.style.transform = `translateX(-${currentSlide * 100}%)`;
+            indicators.forEach((indicator, index) => {
+                if (index === currentSlide) {
+                    indicator.classList.add('bg-opacity-100');
+                    indicator.classList.remove('bg-opacity-50');
+                } else {
+                    indicator.classList.add('bg-opacity-50');
+                    indicator.classList.remove('bg-opacity-100');
+                }
+            });
+        }
+
+        prevBtn.addEventListener('click', () => {
+            currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+            updateCarousel();
+        });
+
+        nextBtn.addEventListener('click', () => {
+            currentSlide = (currentSlide + 1) % slides.length;
+            updateCarousel();
+        });
+
+        // Auto-advance slides
+        setInterval(() => {
+            currentSlide = (currentSlide + 1) % slides.length;
+            updateCarousel();
+        }, 5000);
+
+        // Initial update
+        updateCarousel();
+    </script>
+{% endblock %}

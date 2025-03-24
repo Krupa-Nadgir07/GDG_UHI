@@ -1,0 +1,29 @@
+/* Ensure the parent container takes up the full viewport height */
+html,
+body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    /* overflow: hidden; */
+    /* Prevent scrolling */
+}
+
+#resultsContainer {
+    /* display: none; */
+    /* Initially hidden */
+    position: absolute;
+    top: 100%;
+    /* Position below the search input */
+    left: 0;
+    width: 100%;
+    /* Match width of the input box */
+    max-height: 200px;
+    /* Optional, for scrollable dropdown */
+    overflow-y: auto;
+    /* Enable scrolling if results exceed max-height */
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    z-index: 9999;
+    /* Ensure it appears above other elements */
+}

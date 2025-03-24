@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+{% extends "base.html" %}
+{%block title%} <title>Socio Urban Features</title> {%endblock%}
+{%block subhead%}
+<h6 class="ml-2 text-xl font-bold text-white italic transition-colors duration-300">
+    Explore More on Socio Urban Features!</h6>
+{%endblock%}
+
+{% block content %}
+<main class="flex-grow container mx-auto px-6 py-8 mt-5">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-6"
+            style="background-image: url('{{ url_for('static', filename='images/blur.jpg') }}');">
+            <!-- Card 1 - Degree of Urbanization -->
+            <div
+                class="bg-white rounded-lg shadow-md p-4 flex items-center space-x-4 hover:shadow-lg transition-shadow duration-300">
+                <i data-lucide="building-2" class="text-blue-500 w-12 h-12"></i>
+                <div class="flex-grow">
+                    <h3 class="text-lg font-semibold text-gray-900">Degree of Urbanization</h3>
+                    <p class="text-sm text-gray-600">Classifies areas as urban, peri-urban, or rural.</p>
+                </div>
+                <span class="text-2xl font-bold text-uhi-green">{{socio_urban_params['degree_of_urbanization']| round(2)}}</span>
+            </div>
+
+            <!-- Card 2 - Night Light Intensity -->
+            <div
+                class="bg-white rounded-lg shadow-md p-4 flex items-center space-x-4 hover:shadow-lg transition-shadow duration-300">
+                <i data-lucide="lightbulb" class="text-yellow-500 w-12 h-12"></i>
+                <div class="flex-grow">
+                    <h3 class="text-lg font-semibold text-gray-900">Night Light Intensity</h3>
+                    <p class="text-sm text-gray-600">Measures artificial lighting at night.</p>
+                </div>
+                <span class="text-2xl font-bold text-uhi-green">{{socio_urban_params['night_light_intensity']| round(2)}}</span>
+            </div>
+
+            <!-- Card 3 - Population Density -->
+            <div
+                class="bg-white rounded-lg shadow-md p-4 flex items-center space-x-4 hover:shadow-lg transition-shadow duration-300">
+                <i data-lucide="users" class="text-red-500 w-12 h-12"></i>
+                <div class="flex-grow">
+                    <h3 class="text-lg font-semibold text-gray-900">Population Density</h3>
+                    <p class="text-sm text-gray-600">People per square kilometer.</p>
+                </div>
+                <span class="text-2xl font-bold text-uhi-green">{{socio_urban_params['population_density_per_km2']| round(2)}}</span>
+            </div>
+
+            <!-- Card 4 - Built Settlement Area -->
+            <div
+                class="bg-white rounded-lg shadow-md p-6 flex items-center space-x-4 hover:shadow-lg transition-shadow duration-300">
+                <i data-lucide="map" class="text-green-500 w-12 h-12"></i>
+                <div class="flex-grow">
+                    <h3 class="text-lg font-semibold text-gray-900">Built Settlement Area</h3>
+                    <p class="text-sm text-gray-600">Total developed land area.</p>
+                </div>
+                <span class="text-2xl font-bold text-uhi-green">{{socio_urban_params['built_area_km2']| round(2)}}</span>
+            </div>
+
+            <!-- Card 5 - Built Settlement Height -->
+            <div
+                class="bg-white rounded-lg shadow-md p-6 flex items-center space-x-4 hover:shadow-lg transition-shadow duration-300">
+                <i data-lucide="building" class="text-purple-500 w-12 h-12"></i>
+                <div class="flex-grow">
+                    <h3 class="text-lg font-semibold text-gray-900">Built Settlement Height</h3>
+                    <p class="text-sm text-gray-600">Average building height.</p>
+                </div>
+                <span class="text-2xl font-bold text-uhi-green">{{socio_urban_params['built_height_m']| round(2)}}</span>
+            </div>
+
+            <!-- Card 6 - Morphological Settlement Zone -->
+            <div
+                class="bg-white rounded-lg shadow-md p-6 flex items-center space-x-4 hover:shadow-lg transition-shadow duration-300">
+                <i data-lucide="layout-grid" class="text-indigo-500 w-12 h-12"></i>
+                <div class="flex-grow">
+                    <h3 class="text-lg font-semibold text-gray-900">Morphological Zones</h3>
+                    <p class="text-sm text-gray-600">Categorization of land use patterns.</p>
+                </div>
+                <span class="text-2xl font-bold text-uhi-green">{{socio_urban_params['msz_class']| round(2)}}</span>
+            </div>
+
+            <!-- Card 7 - Global Impervious Surface Area -->
+            <div
+                class="bg-white rounded-lg shadow-md p-6 flex items-center space-x-4 hover:shadow-lg transition-shadow duration-300">
+                <i data-lucide="hexagon" class="text-gray-500 w-12 h-12"></i>
+                <div class="flex-grow">
+                    <h3 class="text-lg font-semibold text-gray-900">Impervious Surface Area</h3>
+                    <p class="text-sm text-gray-600">Area covered by concrete & asphalt.</p>
+                </div>
+                <span class="text-2xl font-bold text-uhi-green">{{socio_urban_params['gis_occurence']| round(2)}}</span>
+            </div>
+
+            <!-- Card 8 - PM2.5 Concentration -->
+            <div
+                class="bg-white rounded-lg shadow-md p-6 flex items-center space-x-4 hover:shadow-lg transition-shadow duration-300">
+                <i data-lucide="wind" class="text-blue-400 w-12 h-12"></i>
+                <div class="flex-grow">
+                    <h3 class="text-lg font-semibold text-gray-900">PM2.5 Concentration</h3>
+                    <p class="text-sm text-gray-600">Fine particulate air pollution.</p>
+                </div>
+                <span class="text-2xl font-bold text-uhi-green">{{socio_urban_params['NO2_mol_per_m2']| round(2)}}</span>
+            </div>
+
+            <!-- Card 9 - NO2 Levels -->
+            <div
+                class="bg-white rounded-lg shadow-md p-6 flex items-center space-x-4 hover:shadow-lg transition-shadow duration-300">
+                <i data-lucide="cloud" class="text-blue-600 w-12 h-12"></i>
+                <div class="flex-grow">
+                    <h3 class="text-lg font-semibold text-gray-900">NO2 Levels</h3>
+                    <p class="text-sm text-gray-600">Nitrogen dioxide concentration.</p>
+                </div>
+                <span class="text-2xl font-bold text-uhi-green">{{socio_urban_params['degree_of_urbanization']| round(2)}}</span>
+            </div>
+        </div>
+        <script>
+        lucide.createIcons();
+    </script>
+    </main>
+    
+{%endblock%}

@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+
+        /* Header styles */
+        header {
+            background-color: #333;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .content-section {
+            padding: 16px;
+            margin-bottom: 50px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-point {
+            position: absolute;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .circle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: white;
+            border: 3px solid black;
+            font-size: 14px;
+            color: black;
+            margin-right: 10px;
+        }
+
+        .roadmap-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .svg-roadmap {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Flexbox container for the main content and roadmap */
+        .main-container {
+            display: flex;
+            height: calc(100vh - 60px); /* Adjust height to accommodate header */
+        }
+
+        .left-content {
+            flex: 2;
+            overflow-y: scroll;
+            padding: 8px;
+            height: 100%;
+        }
+
+        .right-roadmap {
+            flex: 1;
+            position: sticky;
+            top: 60px;
+            height: calc(100vh - 60px); /* Adjust the height to fit the screen */
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body class="h-screen flex flex-col">
+
+    <div style="background-image: url('{{ url_for('static', filename='images/blur.jpg') }}');" class="pr-3 pl-3">
+        <div class="top-bar flex justify-between items-center p-2">
+            <!-- Logo Section -->
+            <div>
+                <a href="/" class="flex items-center mb-3 md:mb-0 md:me-auto text-gray-900 no-underline">
+                    <img src={{ url_for('static', filename='images/logo.png') }} class="h-16" alt="Logo" />
+                </a>
+            </div>
+
+            <!-- Name Section -->
+            <div class="name text-white font-large text-4xl">UHI LENS</div>
+
+            <!-- Tagline Section -->
+            <div>
+                <h6 class="text-white no-underline italic text-xl">
+                    Go, Change The World
+                </h6>
+            </div>
+        </div>
+        <hr class="border-t border-gray-300 w-full mx-auto" />
+
+        <nav>
+            <div class="container mx-auto px-4 py-3">
+                <div class="flex items-center justify-between">
+                    <!-- Logo -->
+                    <div class="flex-0">
+                        <div class="flex justify-center items-center">
+                            <img src={{ url_for('static', filename='images/earth.png') }} height="50px" width="50px" alt="Earth">
+                            
+                            <h6 class="ml-2 text-xl font-bold text-white italic transition-colors duration-300">
+                                Read the Docs!</h6>
+                        </div>
+                    </div>
+
+                    <!-- Desktop Navigation -->
+                    <div class="hidden md:flex space-x-8">
+                        <a href="{{ url_for('home') }}" 
+                            class="text-white hover:text-yellow-400 transition-colors duration-300 text-md tracking-wider font-semibold italic">Home</a>
+                        <a href="{{ url_for('roi') }}" 
+                            class="text-white hover:text-yellow-400 transition-colors duration-300 text-md tracking-wider font-semibold italic">Analyse
+                            your territory</a>
+                        <a href="{{ url_for('world') }}" 
+                            class="text-white hover:text-yellow-400 transition-colors duration-300 text-md tracking-wider font-semibold italic">Impacts
+                            on the World</a>
+                        <a href="{{ url_for('docs') }}" 
+                            class="text-white hover:text-yellow-400 transition-colors duration-300 text-md tracking-wider font-semibold italic">Read
+                            the Docs</a>
+                    </div>
+
+                    <!-- Mobile menu button -->
+                    <div class="md:hidden flex items-center">
+                        <button id="mobile-menu-button" class="text-white focus:outline-none">
+                            <i data-lucide="menu" class="h-6 w-6"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mobile menu -->
+            <div id="mobile-menu" class="hidden md:hidden">
+                <a href="{{ url_for('home') }}"  class="block py-2 px-4 text-sm text-white hover:bg-green-800">Home</a>
+                <a href="{{ url_for('roi') }}" class="block py-2 px-4 text-sm text-white hover:bg-green-800">Analyse your territory</a>
+                <a href="{{ url_for('world') }}"  class="block py-2 px-4 text-sm text-white hover:bg-green-800">Impacts on the World</a>
+                <a href="{{ url_for('docs') }}"  class="block py-2 px-4 text-sm text-white hover:bg-green-800">Read the Docs</a>
+            </div>
+        </nav>
+    </div>
+        <script>
+        // Mobile menu toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Initialize Lucide icons
+        lucide.createIcons();
+    </script>
+
+    <!-- Main Container with Left and Right Sections -->
+    <div class="main-container">
+        <!-- Left Scrollable Section -->
+        <div id="content" class="left-content">
+            <div id="feature-1" class="content-section bg-red-200">
+                <h2 class="text-lg font-bold mb-4">1: Data Acquisition</h2>
+                <p class="text-base">The table below provides details about various datasets used in urban studies, including datasets for urban heat island (UHI) index, land use/land cover (LULC) masks, and socio-urban parameters. It lists the type, resolution, and links to each dataset for further exploration. The datasets include both raster and tabular data, with varying spatial resolutions. The links allow users to access the datasets for use in research and analysis related to urban development and environmental monitoring.</p>
+                <br>
+                <table class="w-full border-collapse bg-black-100 text-center">
+                    <thead>
+                        <tr>
+                            <th class="border p-2" style="background-color: #ec4672;">Dataset for</th>
+                            <th class="border p-2" style="background-color: #ec4672;">Dataset Name</th>
+                            <th class="border p-2" style="background-color: #ec4672;">Type of Dataset</th>
+                            <th class="border p-2" style="background-color: #ec4672;">Resolution for Map based datasets​</th>
+                            <th class="border p-2" style="background-color: #ec4672;">Link to the Datasets</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="bg-white">
+                            <td class="border p-2">Cities and Villages​</td>
+                            <td class="border p-2">Copernicus Sentinel-2 Surface Reflectance (SR) Harmonized dataset</td>
+                            <td class="border p-2">Raster​</td>
+                            <td class="border p-2">10m, 20m, 60m</td>
+                            <td class="border p-2"><a href="https://developers.google.com/earth-engine/datasets/catalog/COPERNICUS_S2_SR_HARMONIZED" target="_blank" class="text-blue-600 hover:text-blue-800 underline">View Dataset</a></td>
+                        </tr>
+                        <tr class="bg-pink-100">
+                            <td class="border p-2">UHI Index</td>
+                            <td class="border p-2">Global Urban Heat Island Intensity Dataset</td>
+                            <td class="border p-2">Tabular</td>
+                            <td class="border p-2">-</td>
+                            <td class="border p-2"><a href="https://figshare.com/articles/dataset/Global_Urban_Heat_Island_Intensity_Dataset/24821538?file=43661826" target="_blank" class="text-blue-600 hover:text-blue-800 underline">View Dataset</a></td>
+                        </tr>
+                        <tr class="bg-white">
+                            <td class="border p-2">LULC Masks</td>
+                            <td class="border p-2">S2TSLULC (Sentinel-2 Temporal Segment LULC)​</td>
+                            <td class="border p-2">Raster</td>
+                            <td class="border p-2">10m​</td>
+                            <td class="border p-2"><a href="https://gee-community-catalog.org/projects/S2TSLULC/" target="_blank" class="text-blue-600 hover:text-blue-800 underline">View Dataset</a></td>
+                        </tr>
+                        <tr class="bg-pink-100">
+                            <td class="border p-2">Socio urban parameters​</td>
+                
+                            <td class="border p-2">
+                                <table class="w-full">
+                                    <tr>
+                                        <td class="border p-2">Global Human Settlement Layer​</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="border p-2">Gridded Population of the World Version 4.11​</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="border p-2">WorldPop dataset </td>
+                                    </tr>
+                                </table>
+                            </td>
+
+                            <td class="border p-2">Raster</td>
+
+                            <td class="border p-2">
+                                <table class="w-full">
+                                    <tr>
+                                        <td class="border p-2">10m</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="border p-2">1km</td>
+                                    </tr>
+                                    <tr>
+                                            <td class="border p-2">100m</td>
+                                    </tr>
+                                </table>
+                            </td>
+                
+                            <td class="border p-2">
+                                <table class="w-full">
+                                    <tr>
+                                        <td class="border p-2"><a href="https://human-settlement.emergency.copernicus.eu/datasets.php" target="_blank" class="text-blue-600 hover:text-blue-800 underline">Link 1</a></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="border p-2"><a href="https://www.earthdata.nasa.gov/data/projects/gpw" target="_blank" class="text-blue-600 hover:text-blue-800 underline">Link 2</a></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="border p-2"><a href="https://www.worldpop.org/" target="_blank" class="text-blue-600 hover:text-blue-800 underline">Link 3</a></td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>                
+                    </tbody>
+                </table>
+                <div class="text-center font-semibold text-base mt-4">Visualizations:</div>
+
+                <div class="grid grid-cols-3 gap-8 mt-4">
+                <!-- First row: 1/3 + 2/3 -->
+                <div class="col-span-1">
+                    <img src="{{ url_for('static', filename='Data Acquisition/vis_2.png') }}" alt="Visualization" class="w-full object-cover rounded-lg shadow-lg">
+
+                </div>
+                <div class="col-span-2">
+                    <img src="{{ url_for('static', filename='Data Acquisition/vis_17_data.png') }}" alt="Visualization" class="w-full object-cover rounded-lg shadow-lg">
+                </div>
+
+               <!-- Second row: Full width image -->
+<div class="col-span-3">
+    <img src="{{ url_for('static', filename='Data Acquisition/vis_1.png') }}" 
+         alt="Visualization 3" 
+         class="w-full object-cover rounded-lg shadow-lg">
+</div>
+
+<!-- Third row: 1/3 + 2/3 -->
+<div class="col-span-1">
+    <img src="{{ url_for('static', filename='Data Acquisition/vis_4.png') }}" 
+         alt="Visualization 6" 
+         class="w-full object-cover rounded-lg shadow-lg">
+</div>
+<div class="col-span-2">
+    <img src="{{ url_for('static', filename='Data Acquisition/vis_6.png') }}" 
+         alt="Visualization 7" 
+         class="w-full object-cover rounded-lg shadow-lg">
+</div>
+
+            </div>
+            </div>
+
+
+            <div id="feature-2" class="content-section bg-yellow-200 p-6">
+                <h2 class="text-lg font-bold mb-4">2: Feature Engineering</h2>
+                <p class="text-base">
+                    Some of the key land cover and environmental features have been extracted from Sentinel satellite imagery. Additionally, socio-urban features are extracted from datasets like WorldPop, GHSL, and NASA's Earth Data for a comprehensive analysis.
+                </p>
+                <br>
+                <p class="text-base"><strong>Sentinel Features: </strong></p>
+                <ol class="list-decimal list-outside ml-6 space-y-2 text-base">
+                    <li>NDVI (Normalized Difference Vegetation Index): Measures vegetation health.</li>
+                    <li>NBR (Normalized Burn Ratio): Detects burned areas and fire severity.</li>
+                    <li>NDUI (Normalized Difference Urban Index): Identifies urban areas.</li>
+                    <li>GNDVI (Green Normalized Difference Vegetation Index): Enhances vegetation monitoring.</li>
+                    <li>NDWI (Normalized Difference Water Index): Maps water bodies.</li>
+                    <li>Shade: Represents shadowed or low-reflectance areas.</li>
+                    <li>NDBI (Normalized Difference Built-up Index): Identifies built-up and impervious surfaces.</li>
+                    <li>NMDI (Normalized Multi-band Drought Index): Detects drought conditions.</li>
+                    <li>NDBSI (Normalized Difference Bare Soil Index): Distinguishes bare soil from vegetation and built-up areas.</li>
+                    <li>NBaDI (Normalized Burned Area Difference Index): Enhances detection of burned areas.</li>
+                    <li>WVP (Water Vapor Product): Measures the height the water would occupy if the vapor were condensed into a liquid and spread evenly across the column.</li>
+                    <li>AOT (Aerosol Optical Thickness): A measure of the extinction of the solar beam by aerosol particles in the atmosphere.</li>
+                    <li>UHSI (Urban Heat Stress Index): Assesses urban heat stress by integrating temperature and environmental factors.</li>
+                    <li>SAVI (Soil-Adjusted Vegetation Index): Improves vegetation monitoring by minimizing soil noise.</li>
+                    <li>LST Proxy (Land Surface Temperature Proxy): Identifies urban heat islands and surface temperature proxies.</li>
+                </ol>
+                <br>
+                <p class="text-base"><strong>Socio-Urban features:</strong></p>
+                <ol class="list-decimal list-outside ml-6 space-y-2 text-base">
+                    <li>degree_of_urbanization: Extent of urban development</li>
+                    <li>morphological_settlement_zone: Classification of settlement type and urban morphology.</li>
+                    <li>built_up_surface: Area covered by built up infrastructure.</li>
+                    <li>avg_gross_built_height: Average height of built structures.</li>
+                    <li>global_impervious_surface_occurence: Global impervious surface areas.</li>
+                    <li>night_light_intensity: Used as a proxy for urban activity and energy usage.</li>
+                    <li>population_density_per_km2: Human population density per square kilometer</li>
+                    <li>no2_mol_per_m2: atmospheric NO2 concentration as a proxy for vehicle emissions and air quality.</li>
+                    <li>pm25: PM2.5 particulate concentration in air.</li>
+                </ol>
+
+            </div>
+            
+
+            <div id="feature-3" class="content-section bg-green-200">
+                <h2 class="text-lg font-bold mb-2">3: Data Preprocessing</h2>
+                <div class="max-w-4xl mx-auto p-4">
+                <p class="text-base">The following methods were applied to preprocess the satellite images and ensure their suitability for analysis:</p>
+                <div class="mt-4">
+                    <h3 class="text-base font-semibold">Atmospheric Correction</h3>
+                    <p class="text-base">Atmospheric correction is a technique used to remove the effects of atmospheric interference (e.g., aerosols, water vapor) from satellite imagery, allowing for more accurate surface reflectance values.</p>
+                </div>
+            
+                <div class="mt-4">
+                    <h3 class="text-base font-semibold">ROI (Region of Interest)</h3>
+                    <p class="text-base">ROI is the process of selecting a specific area within the satellite image that is relevant to the analysis, allowing for focused data processing and analysis of a particular region without unnecessary computational overhead.</p>
+                </div>
+            
+                <div class="mt-4">
+                    <h3 class="text-base font-semibold">Cloud Masking</h3>
+                    <p class="text-base">Cloud masking is a technique used in satellite image preprocessing to identify and remove cloud-covered areas from the image. This helps in reducing the impact of cloud interference on the analysis, ensuring that only clear, usable pixels are considered for further processing.</p>
+                </div>
+            
+                <div class="mt-4">
+                    <h3 class="text-base font-semibold">Simple Brovey</h3>
+                    <p class="text-base">Simple Brovey is a color enhancement method where the ratio of each band to the sum of all bands is computed to produce a synthetic color composite, enhancing the visual representation of features in the image.</p>
+                </div>
+            
+                <div class="mt-4">
+                    <h3 class="text-base font-semibold">Simple Mean</h3>
+                    <p class="text-base">The Simple Mean method involves averaging the pixel values across different bands, producing a single composite image that reduces noise and highlights general features across the image.</p>
+                </div>
+            
+                <div class="mt-4">
+                    <h3 class="text-base font-semibold">Esri</h3>
+                    <p class="text-base">Esri's preprocessing method typically involves radiometric normalization or atmospheric correction, adjusting the satellite image’s pixel values to remove inconsistencies and improve image quality for analysis.</p>
+                </div>
+            
+                <div class="mt-4">
+                    <h3 class="text-base font-semibold">Brovey</h3>
+                    <p class="text-base">The Brovey Transform enhances the visual interpretation of satellite images by combining the input bands in a way that emphasizes specific features (e.g., vegetation or water bodies), making it easier to distinguish between different land cover types.</p>
+                </div>
+            </div>
+            <div class="text-base font-semibold text-base mt-4">Visualizations:</div>
+            <div class="grid grid-cols-1 gap-8 mt-4">
+    <div class="flex justify-center">
+    <img src="{{ url_for('static', filename='Preprocessing/vis_9.1_preprocess.png') }}" 
+         alt="Visualization 1" 
+         class="w-full h-48 object-cover rounded-lg shadow-lg">
+</div>
+
+<div class="grid grid-cols-2 gap-8">
+    <img src="{{ url_for('static', filename='Preprocessing/vis_7_preprocess.png') }}" 
+         alt="Visualization 2" 
+         class="w-full h-56 object-cover rounded-lg shadow-lg">
+    <img src="{{ url_for('static', filename='Preprocessing/vis_8_preprocess.png') }}" 
+         alt="Visualization 3" 
+         class="w-full h-56 object-cover rounded-lg shadow-lg">
+</div>
+
+<div class="grid grid-cols-1 gap-8">
+    <div class="flex justify-center">
+        <img src="{{ url_for('static', filename='Preprocessing/vis_9.3_preprocess.png') }}" 
+             alt="Visualization 4" 
+             class="w-3/4 h-44 object-cover rounded-lg shadow-lg">
+    </div>
+</div>
+
+</div>
+
+            </div>
+            
+
+            <div id="feature-4" class="content-section bg-blue-200">
+                <h2 class="text-lg font-bold mb-4">4: Semantic Segmentation</h2>
+                <p class="text-base">Semantic Segmentation is a convolutional neural network architecture, used here for land-use land-cover classification. It consists of an encoder-decoder structure, where the encoder progressively reduces the spatial resolution of input images while capturing essential features, and the decoder up-samples these features to reconstruct the image. Skip connections are employed to transfer high-resolution features from the encoder to the decoder, ensuring accurate segmentation by preserving fine details. The architecture's symmetry and use of feature extraction and reconstruction allow it to perform well on pixel-wise classification tasks.</p>
+                <div class="max-w-4xl mx-auto p-4">
+                    <p class="ext-base mb-4"><strong>U-net V1:</strong> 1,941,241 parameters, Validation Accuracy: 0.6653, Validation Loss: 1.0428</p>
+                    <p class="ext-base mb-4"><strong>U-net V2:</strong> 1,941,241 parameters, Validation Accuracy: 0.6535, Validation Loss: 1.0238</p>
+                    <p class="ext-base mb-4"><strong>U-net V3:</strong> 466,793 parameters, Validation Accuracy: 0.5386, Validation Loss: 1.2098</p>
+                    <p class="ext-base mb-4"><strong>U-net with batch norm (1):</strong> 1,931,497 parameters, Validation Accuracy: 0.7196, Validation Loss: 0.8438</p>
+                    <p class="ext-base mb-4"><strong>U-net with batch norm (2):</strong> 1,931,497 parameters, Validation Accuracy: 0.7024, Validation Loss: 0.9034</p>
+                    <p class="ext-base mb-4"><strong>Dense Unet Plus:</strong> 14,736,420 parameters, Validation Accuracy: 0.4833, Validation Loss: 1.3491</p>
+                    <p class="ext-base mb-4"><strong>U-net with Resnet backbone:</strong> 30,546,921 parameters, Validation Accuracy: 0.7612, Validation Loss: 1.2573</p>
+                    <p class="ext-base mb-4"><strong>U-net with VGG16 Backbone:</strong> 18,546,185 parameters, Validation Accuracy: 0.7247, Validation Loss: 1.8114</p>
+                    <p class="ext-base mb-4"><strong>U-net with VGG19 Backbone:</strong> 21,496,073 parameters, Validation Accuracy: 0.7277, Validation Loss: 1.8312</p>
+                </div>
+                <p class="text-base"><strong>Visualizations: </strong></p>
+                <div class="grid grid-cols-2 gap-8 mt-6">
+    <img src="{{ url_for('static', filename='Semantic Segmentation/vis_12.1.png') }}" 
+         alt="Image 1" 
+         class="w-full h-40 object-cover rounded-lg col-span-1">
+    <img src="{{ url_for('static', filename='Semantic Segmentation/vis_12.2.png') }}" 
+         alt="Image 2" 
+         class="w-full h-40 object-cover rounded-lg col-span-1">
+
+    <img src="{{ url_for('static', filename='Semantic Segmentation/vis_12.3.png') }}" 
+         alt="Image 3" 
+         class="w-full h-40 object-cover rounded-lg col-span-1">
+    <img src="{{ url_for('static', filename='Semantic Segmentation/vis_12.4.png') }}" 
+         alt="Image 4" 
+         class="w-full h-40 object-cover rounded-lg col-span-1">
+
+    <div class="col-span-2 flex justify-center">
+        <img src="{{ url_for('static', filename='Semantic Segmentation/vis_13.3_model2_sharpen_2000.png') }}" 
+             alt="Centered Image" 
+             class="w-1/3 h-45 object-cover rounded-lg">
+    </div>
+</div>
+        
+            </div>
+
+            <div id="feature-5" class="content-section bg-purple-200">
+                <h2 class="text-lg font-bold mb-4">5: Natural / Man-made Classification</h2>
+                <div class="max-w-4xl mx-auto p-4">
+
+                    <p class="text-base mb-4">This classification builds a binary classifier to distinguish between Urban Heat Islands (UHI) caused by natural or man-made factors. It uses latitude and longitude coordinates to extract geospatial data, such as environmental and urban metrics, from raster files.</p>
+                  
+                    <h3 class="text-base font-semibold mb-2">Feature Extraction and Processing</h3>
+                    <p class="text-base mb-4">Latitude and longitude are converted to the raster's Coordinate Reference System (CRS) to gather corresponding feature values. Missing values are imputed using mode for categorical and mean for continuous features.</p>
+                  
+                    <h3 class="text-base font-semibold mb-2">Feature Selection</h3>
+                    <p class="text-base mb-4">Relevant features are selected using mutual information (MI) scores and a Random Forest Classifier (RFC) for ranking.</p>
+                  
+                    <h3 class="text-base font-semibold mb-2">Model Training</h3>
+                    <p class="text-mase mb-4">The dataset is split into training, validation, and test sets. Two models are trained:</p>
+                    <ul class="list-disc ml-6 text-base mb-4">
+                      <li><strong>Random Forest Classifier (RFC):</strong> A robust model that is tuned for parameters like n_estimators, max_depth, and min_samples_split. Class balancing and bootstrapping are applied for regularization.</li>
+                      <li><strong>Logistic Regression:</strong> Optimized using hyperparameters such as C, penalty, and solver with grid search. L1 penalty is used for sparsity, while L2 regularization ensures generalization.</li>
+                    </ul>
+                  
+                    <h3 class="text-base font-semibold mb-2">Model Optimization</h3>
+                    <p class="text-base mb-4">Hyperparameters for both models are fine-tuned to improve performance, ensuring the model is robust and generalized.</p>
+                  
+                    <h3 class="text-base font-semibold mb-2">Cross-validation</h3>
+                    <p class="text-base mb-4">10-fold cross-validation is applied, splitting the data into 10 subsets. The model is trained on 9 subsets and tested on the 10th, repeating this 10 times. This helps assess model robustness and provides an average performance score. Learning curves are used to monitor for overfitting or underfitting.</p>
+                  
+                    <h3 class="text-base font-semibold mb-2">Evaluation Metrics</h3>
+                    <p class="text-base mb-4">Accuracy, classification reports, and confusion matrices are used to evaluate model performance on the validation set.</p>
+                  </div>                  
+            </div>
+
+
+            <div id="feature-6" class="content-section bg-pink-200">
+                <h2 class="text-lg font-bold mb-4">6: UHI Index Estimation</h2>
+                <p class="text-base font-bold">CNN Model: </p>
+                <div class="max-w-4xl mx-auto p-4">
+                        <h3 class="text-base font-semibold mb-2">Input Layer:</h3>
+                        <p class="ext-base mb-4">Accepts preprocessed satellite images as a 3D tensor (Height × Width × Channels). Images are normalized to a range of [0, 1] and resized to consistent dimensions (e.g., 128×128 or 256×256) for computational efficiency.</p>
+                
+                        <h3 class="text-base font-semibold mb-2">Convolutional Layers:</h3>
+                        <p class="ext-base mb-4">Detect spatial features by applying filters to identify patterns like edges and textures. ReLU activation introduces non-linearity, allowing the model to learn complex patterns.</p>
+                
+                        <h3 class="text-base font-semibold mb-2">Pooling Layers:</h3>
+                        <p class="ext-base mb-4">Reduce spatial dimensions and computational complexity. MaxPooling retains important features, improving generalization and reducing overfitting.</p>
+                
+                        <h3 class="text-base font-semibold mb-2">Fully Connected Layers:</h3>
+                        <p class="ext-base mb-4">Flatten pooled feature maps into a 1D vector and combine learned features through dense layers. Dropout layers help prevent overfitting during training.</p>
+                
+                        <h3 class="text-base font-semibold mb-2">Output Layer:</h3>
+                        <p class="ext-base mb-4">A single node with a linear activation function predicts the UHI index, suitable for regression tasks.</p>
+                </div>
+
+                <p class="text-base font-bold">EA Method for 12-month UHI prediction:</p>
+                <div class="max-w-4xl mx-auto p-4">
+                    <h3 class="text-base font-semibold mb-2">Base Models-</h3>
+                    
+                    <h4 class="text-base font-semibold mb-2">RFR - Random Forest Regressor:</h4>
+                    <p class="ext-base mb-4">Fits multiple decision tree regressors on sub-samples of the dataset and averages their predictions to reduce variance, improving robustness.</p>
+                    
+                    <h4 class="text-base font-semibold mb-2">LGBM - Light GBM:</h4>
+                    <p class="ext-base mb-4">A decision tree model that builds trees leaf-wise, optimizing for both speed and accuracy in predicting the UHI index.</p>
+                    
+                    <h4 class="text-base font-semibold mb-2">SVR - Support Vector Regression:</h4>
+                    <p class="ext-base mb-4">Uses a function to predict continuous output values, applying Radial Basis Function (RBF) kernels that follow a Gaussian distribution for better generalization.</p>
+
+                    <h3 class="text-base font-semibold mb-2">Meta-Regressor - </h3>
+                    <h4 class="text-base font-semibold mb-2">Ridge Regressor:</h4>
+                    <p class="ext-base mb-4">An L2 regularization technique that corrects for overfitting by addressing multicollinearity among predictor variables, improving model stability.</p>
+                </div>
+                <h3 class="text-base font-semibold mb-2">Vizualizations:</h3>
+               <div class="grid grid-cols-3 gap-8 mt-6">
+    <img src="{{ url_for('static', filename='UHI 12 month/vis_17_uhii_12.png') }}" 
+         alt="Graphical Analysis of UHI for selected cities" 
+         class="w-full h-45 object-cover rounded-lg">
+
+    <img src="{{ url_for('static', filename='UHI 12 month/vis_16.2_uhii_monthwise_final.png') }}" 
+         alt="R2 and MSE" 
+         class="w-full h-30 object-cover rounded-lg">
+
+    <img src="{{ url_for('static', filename='UHI 12 month/vis_16.3_uhii_monthwise_final.png') }}" 
+         alt="Final Graphical analysis for samples" 
+         class="w-full h-50 object-cover rounded-lg">
+</div>
+
+            </div>
+
+
+            <div id="feature-7" class="content-section bg-teal-200">
+                <h2 class="text-lg font-bold mb-4">7: LLM for Mitigation</h2>
+                <div class="max-w-4xl mx-auto p-4">
+                    <h3 class="text-base font-semibold mb-2">Objective:</h3>
+                    <p class="ext-base mb-4">Customize the LLaMA-2-7B model for Urban Heat Island (UHI) index prediction using InstructLab.</p>
+                
+                    <h3 class="text-base font-semibold mb-2">Data Preparation:</h3>
+                    <p class="ext-base mb-4">• <strong>Taxonomical Data Structure:</strong> Organized knowledge using a Q&A YAML file and Git repository with detailed markdown (.md) files. The taxonomical structure facilitates easy knowledge retrieval, and synthetic data reduces manual data curation.</p>
+                    <p class="ext-base mb-4">• <strong>Synthetic Data Generation (SynGen):</strong> Creates diverse, domain-specific datasets to enhance model training.</p>
+                
+                    <h3 class="text-base font-semibold mb-2">Fine-Tuning:</h3>
+                    <p class="ext-base mb-4">Adapt the LLaMA-2-7B model using synthetic data for domain relevance and efficiency.Fine-tuned LLMs perform better on specific tasks compared to general-purpose models.</p>
+                </div>                
+            </div>
+        </div>
+
+
+        <div id="roadmap" class="right-roadmap">
+            <div class="roadmap-container">
+                <svg class="svg-roadmap" viewBox="0 0 400 800" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Main Line -->
+                    <path d="M200 50 L200 750" stroke="black" stroke-width="4" fill="none" />
+
+                    <!-- Horizontal Lines to Circles Alternating Left and Right -->
+                    <path d="M200 100 H120" stroke="#f03b20" stroke-width="3" fill="none" />
+                    <path d="M200 200 H280" stroke="#ffbf00" stroke-width="3" fill="none" />
+                    <path d="M200 300 H120" stroke="#80c904" stroke-width="3" fill="none" />
+                    <path d="M200 400 H280" stroke="#0090ff" stroke-width="3" fill="none" />
+                    <path d="M200 500 H120" stroke="#8e44ad" stroke-width="3" fill="none" />
+                    <path d="M200 600 H280" stroke="#ff0080" stroke-width="3" fill="none" />
+                    <path d="M200 700 H120" stroke="#00cccc" stroke-width="3" fill="none" />
+
+                    <!-- Circles for Numbers -->
+                    <circle cx="120" cy="100" r="20" fill="white" stroke="black" stroke-width="3" />
+                    <text x="120" y="102" text-anchor="middle" font-size="14" fill="black" font-weight="bold">1</text>
+
+                    <circle cx="280" cy="200" r="20" fill="white" stroke="black" stroke-width="3" />
+                    <text x="280" y="202" text-anchor="middle" font-size="14" fill="black" font-weight="bold">2</text>
+
+                    <circle cx="120" cy="300" r="20" fill="white" stroke="black" stroke-width="3" />
+                    <text x="120" y="302" text-anchor="middle" font-size="14" fill="black" font-weight="bold">3</text>
+
+                    <circle cx="280" cy="400" r="20" fill="white" stroke="black" stroke-width="3" />
+                    <text x="280" y="402" text-anchor="middle" font-size="14" fill="black" font-weight="bold">4</text>
+
+                    <circle cx="120" cy="500" r="20" fill="white" stroke="black" stroke-width="3" />
+                    <text x="120" y="502" text-anchor="middle" font-size="14" fill="black" font-weight="bold">5</text>
+
+                    <circle cx="280" cy="600" r="20" fill="white" stroke="black" stroke-width="3" />
+                    <text x="280" y="602" text-anchor="middle" font-size="14" fill="black" font-weight="bold">6</text>
+
+                    <circle cx="120" cy="700" r="20" fill="white" stroke="black" stroke-width="3" />
+                    <text x="120" y="702" text-anchor="middle" font-size="14" fill="black" font-weight="bold">7</text>
+                </svg>
+
+                <!-- Labels for Destination Points -->
+                <div class="feature-point" data-target="feature-1" style="top: 10%; left: 3%;">
+                    <span>Data Acquisition</span>
+                </div>
+                <div class="feature-point" data-target="feature-2" style="top: 20%; left: 70%;">
+                    <span>Feature</br>Engineering</span>
+                </div>
+                <div class="feature-point" data-target="feature-3" style="top: 35%; left: 5%;">
+                    <span>Pre-Processing</span>
+                </div>
+                <div class="feature-point" data-target="feature-4" style="top: 46%; left: 70%;">
+                    <span>Semantic Segmentation</span>
+                </div>
+                <div class="feature-point" data-target="feature-5" style="top: 60%; left: 0.5%;">
+                    <span>Natural/Man-made</br> Classification</span>
+                </div>
+                <div class="feature-point" data-target="feature-6" style="top: 70%; left: 70%;">
+                    <span>UHI Index Estimation</span>
+                </div>
+                <div class="feature-point" data-target="feature-7" style="top: 85%; left: 5%;">
+                    <span>LLM(Mitigation)</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const sections = document.querySelectorAll('[id^="feature-"]');
+        const circles = document.querySelectorAll('circle'); // Select circles in the SVG
+    
+        function syncHighlight() {
+            let currentFeature = '';
+            sections.forEach((section) => {
+                const rect = section.getBoundingClientRect();
+                const isVisible = rect.top < window.innerHeight && rect.bottom >= 0;
+
+                if (isVisible) {
+                    currentFeature = section.id;
+                }
+            });
+    
+            // Loop through circles and change their styles based on the current feature
+            circles.forEach((circle, index) => {
+                const featureId = `feature-${index + 1}`;
+                if (featureId === currentFeature) {
+                    circle.style.fill = '#f03b20'; // Highlight the circle
+                    circle.style.stroke = 'black';
+                } else {
+                    circle.style.fill = 'white';
+                    circle.style.stroke = 'black';
+                }
+            });
+        }
+    
+        // Add scroll event listener to sync the highlights
+        document.getElementById('content').addEventListener('scroll', syncHighlight);
+        window.addEventListener('load', syncHighlight);
+    </script>
+</body>
+</html>

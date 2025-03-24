@@ -1,0 +1,254 @@
+{% extends "base.html" %}
+
+{%block title%} <title>Analysisng UHI</title> {%endblock%}
+
+{%block subhead%}
+<h6 class="ml-2 text-xl font-bold text-white italic transition-colors duration-300">
+    Lets Analyse {{city}}!</h6>
+{%endblock%}
+
+{% block content %}
+<div class="grid grid-rows-[1fr,2fr,3fr,1fr,1fr] h-screen">
+        <!-- Row 1 -->
+        <div class="flex items-center justify-between p-6 w-full h-[40vh]">
+            <div class="flex flex-col items-start text-left space-y-2 max-w-md pl-20">
+                <div class="text-4xl font-bold text-gray-800">{{city}}</div>
+                <div class="text-lg text-gray-600">{{address}}</div>
+            </div>
+            <div class="flex flex-col items-center space-y-4 text-base text-gray-500 ml-auto pr-20">
+                <div class="flex flex-row space-x-8">
+                    <div class="flex flex-col items-center">
+                        <div class="font-semibold">Latitude</div>
+                        <div class="text-gray-700">{{info['latitude']}}</div>
+                    </div>
+                    <div class="flex flex-col items-center">
+                        <div class="font-semibold">Longitude</div>
+                        <div class="text-gray-700">{{info['longitude']}}</div>
+                    </div>
+                </div>
+                <div class="flex flex-col items-center">
+                    <div class="font-semibold">Area</div>
+                    <div class="text-gray-700">{{area_covered}}</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Row 2 -->
+        <div class="grid grid-cols-2 bg-black text-white h-[50vh] bg-cover bg-center" style="background-image: url('https://images.pexels.com/photos/1129253/pexels-photo-1129253.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');">
+            <div id="uhi-container-1" class="flex flex-col items-center justify-center p-4">
+                <a href="#" class="block max-w-lg p-10 bg-white border border-gray-200 rounded-lg shadow mb-2 h-full w-[100%]">
+                    <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900">Urban Heat Island Index</h5>
+                    <p class="font-normal text-gray-700 dark:text-gray-400">The equal-area (EA) method stands as one of the most employed methods for UHII estimations. This method acquires the background reference area (BRA) by creating a buffer around the urban area equal to its size. The selected BRA eliminates the influences of water bodies and topographic relief.</p>
+                </a>
+            </div>
+            <div id="uhi-container-2" class="relative flex items-center justify-center overflow-hidden">
+                <div class="flex flex-col space-y-6">
+                    <div class="grid grid-cols-2 items-center gap-6">
+                        <div class="flex items-center space-x-6">
+                            <h2 class="text-3xl font-bold">UHI Index</h2> 
+                        </div>
+                        <div id="uhi-index" class="text-6xl font-bold text-yellow-400 text-right">-8</div>
+                    </div>
+                    <hr>
+                    <div class="grid grid-cols-2 items-center gap-6">
+                        <div class="flex items-center space-x-6">
+                            <i class="fa-solid fa-map-pin text-3xl"></i>
+                            <span class="text-xl font-bold">Building</span>
+                        </div>
+                        <span class="text-xl font-bold text-yellow-400 text-right" id="building-percentage">0 %</span>
+                    </div>
+                    <div class="grid grid-cols-2 items-center gap-6">
+                        <div class="flex items-center space-x-6">
+                            <i class="fa-solid fa-map-pin text-3xl"></i>
+                            <span class="text-xl font-bold">Water</span>
+                        </div>
+                        <span class="text-xl font-bold text-yellow-400 text-right" id="vegetation-percentage">0 %</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Row 3 -->
+        <div class="bg-cover bg-center h-[75vh] flex items-center justify-center text-white text-2xl font-bold bg-black">
+            <div class="flex items-center justify-center">
+                <div class="grid min-h-[140px] w-full place-items-center overflow-x-scroll rounded-lg p-6 lg:overflow-visible">
+                    <img class="object-cover object-center w-full rounded-lg h-96" src="data:image/png;base64,{{ sat_img }}" alt="nature image" />
+                    <div class="flex flex-col items-center">
+                        <div class="font-semibold">Satellite</div>
+                    </div>
+                </div>
+            </div>
+            <div class="flex items-center justify-center">
+                <div class="grid min-h-[140px] w-full place-items-center overflow-x-scroll rounded-lg p-6 lg:overflow-visible">
+                    <img class="object-cover object-center w-full rounded-lg h-96" src="data:image/png;base64,{{ lulc_img }}" alt="nature image" />
+                    <div class="flex flex-col items-center">
+                        <div class="font-semibold">LULC Mask</div>
+                    </div>
+                </div>
+            </div>
+            <div class="overflow-x-auto p-6">
+    <table class="w-full">
+        <thead>
+            <tr class="bg-gray-200">
+                <th class="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Land Cover Class</th>
+                <th class="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Color Representation</th>
+            </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-200">
+            <tr class="bg-gray-50">
+                <td class="px-6 py-2 whitespace-nowrap text-sm font-medium text-gray-900">Water</td>
+                <td class="px-6 py-2 whitespace-nowrap text-sm text-gray-500">
+                    <div class="flex items-center">
+                        <div class="w-6 h-6 rounded-full mr-2 border border-gray-300" style="background-color: #1A5BAB;"></div>
+                        <span>#1A5BAB</span>
+                    </div>
+                </td>
+            </tr>
+            <tr class="bg-white">
+                <td class="px-6 py-2 whitespace-nowrap text-sm font-medium text-gray-900">Trees</td>
+                <td class="px-6 py-2 whitespace-nowrap text-sm text-gray-500">
+                    <div class="flex items-center">
+                        <div class="w-6 h-6 rounded-full mr-2 border border-gray-300" style="background-color: #358221;"></div>
+                        <span>#358221</span>
+                    </div>
+                </td>
+            </tr>
+            <tr class="bg-gray-50">
+                <td class="px-6 py-2 whitespace-nowrap text-sm font-medium text-gray-900">Flooded Vegetation</td>
+                <td class="px-6 py-2 whitespace-nowrap text-sm text-gray-500">
+                    <div class="flex items-center">
+                        <div class="w-6 h-6 rounded-full mr-2 border border-gray-300" style="background-color: #87D19E;"></div>
+                        <span>#87D19E</span>
+                    </div>
+                </td>
+            </tr>
+            <tr class="bg-white">
+                <td class="px-6 py-2 whitespace-nowrap text-sm font-medium text-gray-900">Crops</td>
+                <td class="px-6 py-2 whitespace-nowrap text-sm text-gray-500">
+                    <div class="flex items-center">
+                        <div class="w-6 h-6 rounded-full mr-2 border border-gray-300" style="background-color: #FFDB5C;"></div>
+                        <span>#FFDB5C</span>
+                    </div>
+                </td>
+            </tr>
+            <tr class="bg-gray-50">
+                <td class="px-6 py-2 whitespace-nowrap text-sm font-medium text-gray-900">Built Area</td>
+                <td class="px-6 py-2 whitespace-nowrap text-sm text-gray-500">
+                    <div class="flex items-center">
+                        <div class="w-6 h-6 rounded-full mr-2 border border-gray-300" style="background-color: #ED022A;"></div>
+                        <span>#ED022A</span>
+                    </div>
+                </td>
+            </tr>
+            <tr class="bg-white">
+                <td class="px-6 py-2 whitespace-nowrap text-sm font-medium text-gray-900">Bare Ground</td>
+                <td class="px-6 py-2 whitespace-nowrap text-sm text-gray-500">
+                    <div class="flex items-center">
+                        <div class="w-6 h-6 rounded-full mr-2 border border-gray-300" style="background-color: #EDE9E4;"></div>
+                        <span>#EDE9E4</span>
+                    </div>
+                </td>
+            </tr>
+            <tr class="bg-gray-50">
+                <td class="px-6 py-2 whitespace-nowrap text-sm font-medium text-gray-900">Snow/Ice</td>
+                <td class="px-6 py-2 whitespace-nowrap text-sm text-gray-500">
+                    <div class="flex items-center">
+                        <div class="w-6 h-6 rounded-full mr-2 border border-gray-300" style="background-color: #F2FAFF;"></div>
+                        <span>#F2FAFF</span>
+                    </div>
+                </td>
+            </tr>
+            <tr class="bg-white">
+                <td class="px-6 py-2 whitespace-nowrap text-sm font-medium text-gray-900">Clouds</td>
+                <td class="px-6 py-2 whitespace-nowrap text-sm text-gray-500">
+                    <div class="flex items-center">
+                        <div class="w-6 h-6 rounded-full mr-2 border border-gray-300" style="background-color: #C8C8C8;"></div>
+                        <span>#C8C8C8</span>
+                    </div>
+                </td>
+            </tr>
+            <tr class="bg-gray-50">
+                <td class="px-6 py-2 whitespace-nowrap text-sm font-medium text-gray-900">Rangeland</td>
+                <td class="px-6 py-2 whitespace-nowrap text-sm text-gray-500">
+                    <div class="flex items-center">
+                        <div class="w-6 h-6 rounded-full mr-2 border border-gray-300" style="background-color: #C6AD8D;"></div>
+                        <span>#C6AD8D</span>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+        </div>
+
+        <!-- Row 4: Plot -->
+        <div class="bg-black h-[90vh] flex items-center justify-center w-full">
+           {{ plot_base64|safe }}
+        </div>
+
+        <!-- Row 5 -->
+        <div class="bg-white flex items-center justify-center text-2xl font-bold p-4" style="background-image: url('https://images.pexels.com/photos/1129253/pexels-photo-1129253.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');">
+            <div class="flex flex-col items-center text-center">
+                 <div class="w-[90vh] bg-gray-100 rounded-lg p-6 shadow-inner">
+        <div class="bg-white rounded-xl shadow-lg p-8 flex flex-col items-center text-center space-y-6 w-full max-w-2xl mx-auto">
+    <!-- Title Section -->
+    <h1 class="text-4xl font-extrabold text-gray-800 w-full">
+        Wanna Know More About Your City?
+    </h1>
+    <p class="text-xl font-semibold text-gray-600">
+        Here is more for you to know about your city!
+    </p>
+
+    <!-- Information Grid -->
+    <div class="w-full bg-gray-100 rounded-lg p-4 shadow-inner">
+        <div class="grid grid-cols-2 gap-6 items-center w-full">
+            <!-- UHI Index -->
+            <div class="flex items-center">
+                <h2 class="text-2xl font-semibold text-gray-700">UHI Index</h2>
+            </div>
+            <div id="uhi-index" class="text-3xl font-bold text-green-900 text-right">
+                {{ uhi_predict | round(2) }}
+            </div>
+
+            <!-- Primary Cause -->
+            <div class="flex items-center">
+                <h2 class="text-2xl font-semibold text-gray-700">Primary Cause</h2>
+            </div>
+            <div class="text-2xl font-bold text-red-900 text-right">
+                {{ 'Natural' if natural_or_manmade == 0 else 'Manmade' }}
+            </div>
+    </div>
+</div>
+
+    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+     <script>
+        function animateValue(obj, start, end, duration) {
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                obj.innerHTML = (progress * (end - start) + start).toFixed(2);
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                }
+            };
+            window.requestAnimationFrame(step);
+        }
+
+        setTimeout(() => {
+            const uhiIndex = document.getElementById("uhi-index");
+            animateValue(uhiIndex, -8, {{uhi_predict}}, 3000);
+
+            const buildingPercentage = document.getElementById("building-percentage");
+            animateValue(buildingPercentage, 0, {{top1[1]}}, 3000);
+
+            const vegetationPercentage = document.getElementById("vegetation-percentage");
+            animateValue(vegetationPercentage, 0, {{top2[1]}}, 3000);
+        }, 2000);
+    </script>
+{%endblock%}

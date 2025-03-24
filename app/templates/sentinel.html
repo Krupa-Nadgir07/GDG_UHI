@@ -1,0 +1,247 @@
+{% extends "base.html" %}
+
+{%block title%} <title>Sentinel Features</title> {%endblock%}
+
+{%block subhead%}
+<h6 class="ml-2 text-xl font-bold text-white italic transition-colors duration-300">
+    Explore More on Sentinel Features!</h6>
+{%endblock%}
+
+{% block content %}
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
+        <div class="p-4 rounded-lg shadow pr-3 pl-3" style="background-image: url('{{ url_for('static', filename='images/blur.jpg') }}');">
+            <div class="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow duration-300">
+                <form method="POST" action="/sentinel_features" class="space-y-4">
+    <div>
+        <label for="indexDropdown" class="block mb-1 text-sm font-medium text-gray-700">Select Index:</label>
+        <select name="index" id="indexDropdown" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500">
+            <option value="ndvi" {% if selected_index == 'NDVI' %}selected{% endif %}>NDVI</option>
+            <option value="nbr" {% if selected_index == 'NBR' %}selected{% endif %}>NBR</option>
+            <option value="ndui" {% if selected_index == 'NDUI' %}selected{% endif %}>NDUI</option>
+            <option value="gndvi" {% if selected_index == 'GNDVI' %}selected{% endif %}>GNDVI</option>
+            <option value="ndwi" {% if selected_index == 'NDWI' %}selected{% endif %}>NDWI</option>
+            <option value="shade" {% if selected_index == 'Shade' %}selected{% endif %}>Shade</option>
+            <option value="ndbi" {% if selected_index == 'NDBI' %}selected{% endif %}>NBDI</option>
+            <option value="nmdi" {% if selected_index == 'NMDI' %}selected{% endif %}>NMDI</option>
+            <option value="ndbsi" {% if selected_index == 'NDBSI' %}selected{% endif %}>NDBSI</option>
+            <option value="nbadi" {% if selected_index == 'NBaDI' %}selected{% endif %}>NBADI</option>
+            <option value="wvp" {% if selected_index == 'WVP' %}selected{% endif %}>WVP</option>
+            <option value="aot" {% if selected_index == 'AOT' %}selected{% endif %}>AOT</option>
+            <option value="lst" {% if selected_index == 'LST' %}selected{% endif %}>LST</option>
+            <option value="savi" {% if selected_index == 'SAVI' %}selected{% endif %}>SAVI</option>
+            <option value="uhsi" {% if selected_index == 'UHSI' %}selected{% endif %}>UHSI</option>
+        </select>
+    </div>
+
+    <div>
+        <label for="colorPaletteDropdown" class="block mb-1 text-sm font-medium text-gray-700">Select Color Palette:</label>
+        <div class="gradient-container">
+            <select name="color" id="colorPaletteDropdown" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500">
+                <option value="viridis" {% if color_map == 'viridis' %}selected{% endif %} data-gradient="linear-gradient(to right, #440154, #3b528b, #21908d, #5dc963, #f1e90f)">Viridis - best for NDVI, GNDVI, SAVI</option>
+                <option value="inferno" {% if color_map == 'inferno' %}selected{% endif %} data-gradient="linear-gradient(to right, #000004, #450a41, #9e1c64, #fb6a3b, #f8fd9d)">Inferno - best for NBR, NBRI</option>
+                <option value="plasma" {% if color_map == 'plasma' %}selected{% endif %} data-gradient="linear-gradient(to right, #0d0887, #6a00a8, #dd3c37, #f0f921)">Plasma - best for NDVI, NDWI</option>
+                <option value="magma" {% if color_map == 'magma' %}selected{% endif %} data-gradient="linear-gradient(to right, #000004, #6a0a5a, #e00076, #fdbe5e, #f8f8f0)">Magma - best for NBR, NBRI</option>
+                <option value="cividis" {% if color_map == 'cividis' %}selected{% endif %} data-gradient="linear-gradient(to right, #00204e, #3a9db0, #f1b800, #f0eb72)">Cividis - best for NDVI, NDWI</option>
+                <option value="coolwarm" {% if color_map == 'coolwarm' %}selected{% endif %} data-gradient="linear-gradient(to right, #3b4cc0, #fb9b0a, #d12000)">Coolwarm - best for AOT, LST</option>
+                <!-- Add the other options similarly -->
+            </select>
+            <span class="gradient-preview"></span>
+        </div>
+    </div>
+
+    <button type="submit" class="w-full p-2 bg-green-900 text-white rounded-md hover:bg-green-700 transition-colors duration-300">
+        Generate Plot
+    </button>
+</form>
+
+            </div>
+            {% if selected_index == 'NDVI' %}
+<div class="bg-gray-100 p-6 rounded-lg shadow mt-4">
+    <h2 class="text-xl font-bold text-green-400">NDVI (Normalized Difference Vegetation Index):</h2>
+    <p class="mt-2 text-lg">$$NDVI = \frac{(NIR - Red)}{(NIR + Red)}$$</p>
+    <ul class="mt-3 text-black">
+        <li><strong>Purpose:</strong> Assess vegetation health.</li>
+        <li><strong>Bands Used:</strong> B8 (NIR), B4 (Red).</li>
+    </ul>
+</div>
+{% elif selected_index == 'NBR' %}
+<div class="bg-gray-100 p-6 rounded-lg shadow mt-4">
+    <h2 class="text-xl font-bold text-red-400">NBR (Normalized Burn Ratio):</h2>
+    <p class="mt-2 text-lg">$$NBR = \frac{(NIR - SWIR2)}{(NIR + SWIR2)}$$</p>
+    <ul class="mt-3 text-black">
+        <li><strong>Purpose:</strong> Detect burned areas and monitor recovery.</li>
+        <li><strong>Bands Used:</strong> B8 (NIR), B12 (SWIR2).</li>
+    </ul>
+</div>
+{% elif selected_index == 'NDUI' %}
+<div class="bg-gray-100 p-6 rounded-lg shadow mt-4">
+    <h2 class="text-xl font-bold text-blue-400">NDUI (Normalized Difference Urban Index):</h2>
+    <p class="mt-2 text-lg">$$NDUI = \frac{(SWIR1 - NIR)}{(SWIR1 + NIR)}$$</p>
+    <ul class="mt-3 text-black">
+        <li><strong>Purpose:</strong> Identify urban areas.</li>
+        <li><strong>Bands Used:</strong> B11 (SWIR1), B8 (NIR).</li>
+    </ul>
+</div>
+{% elif selected_index == 'GNDVI' %}
+<div class="bg-gray-100 p-6 rounded-lg shadow mt-4">
+    <h2 class="text-xl font-bold text-green-400">GNDVI (Green Normalized Difference Vegetation Index):</h2>
+    <p class="mt-2 text-lg">$$GNDVI = \frac{(NIR - Green)}{(NIR + Green)}$$</p>
+    <ul class="mt-3 text-black">
+        <li><strong>Purpose:</strong> Monitor crop canopy growth.</li>
+        <li><strong>Bands Used:</strong> B8 (NIR), B3 (Green).</li>
+    </ul>
+</div>
+{% elif selected_index == 'NDWI' %}
+<div class="bg-gray-100 p-6 rounded-lg shadow mt-4">
+    <h2 class="text-xl font-bold text-blue-400">NDWI (Normalized Difference Water Index):</h2>
+    <p class="mt-2 text-lg">$$NDWI = \frac{(Green - NIR)}{(Green + NIR)}$$</p>
+    <ul class="mt-3 text-black">
+        <li><strong>Purpose:</strong> Identify water bodies.</li>
+        <li><strong>Bands Used:</strong> B3 (Green), B8 (NIR).</li>
+    </ul>
+</div>
+{% elif selected_index == 'Shade' %}
+<div class="bg-gray-100 p-6 rounded-lg shadow mt-4">
+    <h2 class="text-xl font-bold text-gray-500">Shade:</h2>
+    <p class="mt-2 text-lg">$$Shade = 1 - NDVI$$</p>
+    <ul class="mt-3 text-black">
+        <li><strong>Purpose:</strong> Highlight areas with low vegetation density.</li>
+        <li><strong>Bands Used:</strong> Derived from NDVI.</li>
+    </ul>
+</div>
+{% elif selected_index == 'NDBI' %}
+<div class="bg-gray-100 p-6 rounded-lg shadow mt-4">
+    <h2 class="text-xl font-bold text-red-500">NDBI (Normalized Difference Built-Up Index):</h2>
+    <p class="mt-2 text-lg">$$NDBI = \frac{(SWIR1 - NIR)}{(SWIR1 + NIR)}$$</p>
+    <ul class="mt-3 text-black">
+        <li><strong>Purpose:</strong> Identify built-up areas.</li>
+        <li><strong>Bands Used:</strong> B11 (SWIR1), B8 (NIR).</li>
+    </ul>
+</div>
+{% elif selected_index == 'NMDI' %}
+<div class="bg-gray-100 p-6 rounded-lg shadow mt-4">
+    <h2 class="text-xl font-bold text-yellow-500">NMDI (Normalized Multi-band Drought Index):</h2>
+    <p class="mt-2 text-lg">$$NMDI = \frac{(SWIR1 - (NIR + SWIR2))}{(SWIR1 + (NIR + SWIR2))}$$</p>
+    <ul class="mt-3 text-black">
+        <li><strong>Purpose:</strong> Detect drought stress.</li>
+        <li><strong>Bands Used:</strong> B11 (SWIR1), B8 (NIR), B12 (SWIR2).</li>
+    </ul>
+</div>
+{% elif selected_index == 'NDBSI' %}
+<div class="bg-gray-100 p-6 rounded-lg shadow mt-4">
+    <h2 class="text-xl font-bold text-brown-500">NDBSI (Normalized Difference Bare Soil Index):</h2>
+    <p class="mt-2 text-lg">$$NDBSI = \frac{(NDBI + (1 - NDVI))}{2}$$</p>
+    <ul class="mt-3 text-black">
+        <li><strong>Purpose:</strong> Detect bare soil.</li>
+        <li><strong>Bands Used:</strong> Derived from NDBI and NDVI.</li>
+    </ul>
+</div>
+{% elif selected_index == 'NBaDI' %}
+<div class="bg-gray-100 p-6 rounded-lg shadow mt-4">
+    <h2 class="text-xl font-bold text-orange-500">NBaDI (Normalized Burned Area Differential Index):</h2>
+    <p class="mt-2 text-lg">$$NBaDI = \frac{(SWIR2 - Green)}{(SWIR2 + Green)}$$</p>
+    <ul class="mt-3 text-black">
+        <li><strong>Purpose:</strong> Highlight burned areas.</li>
+        <li><strong>Bands Used:</strong> B12 (SWIR2), B3 (Green).</li>
+    </ul>
+</div>
+{% elif selected_index == 'WVP' %}
+<div class="bg-gray-100 p-6 rounded-lg shadow mt-4">
+    <h2 class="text-xl font-bold text-blue-400">VWP (Water Vapor Pressure):</h2>
+    <p class="mt-2 text-lg">The height the water would occupy if the vapor were condensed into liquid and spread evenly across the column.</p>
+    <ul class="mt-3 text-black">
+        <li><strong>Purpose:</strong> Used for atmospheric corrections and analyzing humidity.</li>
+    </ul>
+</div>
+{% elif selected_index == 'AOT' %}
+<div class="bg-gray-100 p-6 rounded-lg shadow mt-4">
+    <h2 class="text-xl font-bold text-yellow-400">AOT (Aerosol Optical Thickness):</h2>
+    <p class="mt-2 text-lg">A measure of the extinction of the solar beam by aerosol particles in the atmosphere.</p>
+    <ul class="mt-3 text-black">
+        <li><strong>Purpose:</strong> Useful for haze correction and understanding air quality.</li>
+    </ul>
+</div>
+{% elif selected_index == 'UHSI' %}
+<div class="bg-gray-100 p-6 rounded-lg shadow mt-4">
+    <h2 class="text-xl font-bold text-red-400">UHSI (Urban Heat Surface Index):</h2>
+    <p class="mt-2 text-lg">Formula: Derived from thermal proxies using SWIR bands.</p>
+    <ul class="mt-3 text-black">
+        <li><strong>Purpose:</strong> Highlights heat island effects in urban areas.</li>
+        <li><strong>Bands Used:</strong> B11 (SWIR1), B12 (SWIR2).</li>
+    </ul>
+</div>
+{% elif selected_index == 'SAVI' %}
+<div class="bg-gray-100 p-6 rounded-lg shadow mt-4">
+    <h2 class="text-xl font-bold text-green-500">SAVI (Soil-Adjusted Vegetation Index):</h2>
+    <p class="mt-2 text-lg">$$SAVI = (1 + L) * \frac{(B8 - B4)}{(B8 + B4 + L)}$$</p>
+    <ul class="mt-3 text-black">
+        <li><strong>Purpose:</strong> Reduces soil noise in vegetation analysis.</li>
+        <li><strong>Bands Used:</strong> B4 (Red), B8 (NIR).</li>
+    </ul>
+</div>
+{% elif selected_index == 'LST' %}
+<div class="bg-gray-100 p-6 rounded-lg shadow mt-4">
+    <h2 class="text-xl font-bold text-orange-500">LST (Land Surface Temperature Proxy):</h2>
+    <p class="mt-2 text-lg">Formula: Uses TIRS or derived emissivity (can use SWIR bands for estimation).</p>
+    <ul class="mt-3 text-black">
+        <li><strong>Purpose:</strong> Identifies urban heat islands and surface temperature proxies.</li>
+        <li><strong>Bands Used:</strong> B11 (SWIR1), B12 (SWIR2).</li>
+    </ul>
+</div>
+{% else %}
+<div class="bg-gray-100 p-6 rounded-lg shadow mt-4">
+    <h2 class="text-xl font-bold text-gray-400">Select an Index</h2>
+    <p class="mt-2 text-lg">Please select an index to view details.</p>
+</div>
+{% endif %}
+<div 
+    class="bg-white rounded-lg shadow-md p-6 flex items-center space-x-4 hover:shadow-lg transition-shadow duration-300 mt-4">
+    <div class="flex-grow">
+        <p class="text-gray-700 font-semibold">
+            Min: <span class="text-blueblack">{{ mini }}</span> <br>
+            Max: <span class="text-black">{{ maxi }}</span> <br>
+            Avg: <span class="text-black">{{ mean }}</span> <br>
+            Std Dev: <span class="text-black">{{ std }}</span> <br>
+        </p>
+        <p class="text-gray-600">
+            <strong>Address:</strong> {{ address }}
+        </p>
+    </div>
+</div>
+
+        </div>
+        <div class="bg-green-200 p-4 rounded-lg shadow">
+            <div class="flex-grow flex items-center justify-center overflow-hidden">
+                {% if sentinel_raster %}
+                <div class="relative w-full h-full">
+                    <div
+                        style="width: 100%; height: 100%; overflow: hidden; display: flex; align-items: center; justify-content: center;">
+                        {{ sentinel_raster|safe }}
+                    </div>
+                </div>
+                {% else %}
+                <div class="bg-gray-200 h-64 flex items-center justify-center">
+                    <p>Generated plot will appear here</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Color palette preview
+        const colorPaletteDropdown = document.getElementById('colorPaletteDropdown');
+        const gradientPreview = document.querySelector('.gradient-preview');
+
+        function updateGradientPreview() {
+            const selectedOption = colorPaletteDropdown.options[colorPaletteDropdown.selectedIndex];
+            const gradient = selectedOption.getAttribute('data-gradient');
+            gradientPreview.style.background = gradient;
+        }
+
+        colorPaletteDropdown.addEventListener('change', updateGradientPreview);
+
+        // Initialize the gradient preview
+        updateGradientPreview();
+    </script>
+{%endblock%}
