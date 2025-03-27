@@ -55,5 +55,5 @@ This system utilizes outputs of 5 machine learning models, each used for a speci
 
 All the above discussed models are deployed and this github repository gives access to the code.
 
-MVP Link [Demo Video]​
+MVP Link [Demo Video] : ​
 https://youtu.be/PXvqN1cuZ3M?si=hxvLe0Qr48IIPIOe 
